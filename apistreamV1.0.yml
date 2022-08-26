@@ -1,0 +1,282 @@
+openapi: 3.0.1
+info:
+  title: streaming-api
+  version: 1.0.0
+servers:
+- url: https://STD21097.io
+paths:
+  /films:
+    get:
+      tags:
+        - "Films"
+      summary: Get all Films
+      operationId: getFilms
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Film'
+        400:
+          description: Error
+          content: {}
+    post:
+      tags:
+        - "Films"
+      summary: Creates some films
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/NewFilm'
+      responses:
+        200:
+          description: List of new films
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Film'
+  /films{id}:
+    get:
+      tags:
+        - "Films"
+      summary: Get the film spcified by id
+      operationId: getFilms
+      description: return the movie with the id as a parameter
+      parameters:
+        - name: id 
+          in: query
+          schema:
+            type: int 
+            example: 110
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Film'
+        400:
+          description: Error
+          content: {}
+    patch:
+      tags:
+        - "Films"
+      summary: modify price of the movie specified by id
+      operationId: modifyFilms
+      description: up to date the price of the film specified by id 
+      parameters:
+        - name: id
+          in:  query
+          schema:
+            type: int
+            example: 220
+  /films/{gender}:
+    get:
+      tags:
+        - "Films"
+      summary: get all films by gender
+      operationId: getFilms
+      description: return the movie with the same genre that is provided as a parameter
+      parameters:
+        - name: gender
+          in: query
+          schema:
+            type: string
+            example: "romantic" 
+    patch:
+      tags:
+        - "Films"
+      summary: modify the prices of movies of the same genre
+      operationId: modifyFilms
+      description: apitoviana daholo ny vidin'ny film rehetra mitovy karazana
+      parameters:
+        - name: gender 
+          in: query 
+          schema:
+            type: string
+            example: "action"
+    delete:
+      tags:
+        - "Films"
+      summary: Delete some films
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Returns the id of the deleted student"
+
+        400:
+          description: Error
+          content: {}
+  /films/{id}:
+    get:
+      tags:
+        - "Films"
+      summary: get the film by specified id
+      operationId: getFilm
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Film'
+        400:
+          description: Error
+          content: {}
+    put:
+      tags:
+        - "Films"
+      summary: allows you to modify film data except its id
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        description: new film
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewFilm'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Film'
+        400:
+          description: Error
+          content: {}
+    delete:
+      tags:
+        - "Films"
+      summary: deletes a film by referring to its id
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+        200:
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Returns the id of the deleted student"
+        400:
+          description: Error
+          content: {} 
+  /commentaire:
+    get:
+      tags:
+        - "Commentaires"
+      summary: get all commentaires
+components:
+  schemas:
+    Room:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'A'
+        capacity:
+          type: number
+          example: 30
+        
+    NewFilm:
+      type: object
+      properties:
+        title:
+          type: string
+        duration:
+          type: string
+        summary:
+          type: string
+        director:
+          type: string
+        released_date:
+          type: string
+          format: date
+    Film:
+      type: object
+      properties:
+        id:
+          type: number
+      allOf:
+        - $ref: '#/components/schemas/NewFilm'
+    NewProjection:
+      type: object
+      properties:
+        filmId:
+          type: integer
+          example: 1
+        roomId:
+          type: string
+          default: A
+          enum:
+            - A
+            - B
+        hour:
+          type: string
+          format: date-time
+    Projection:
+      type: object
+      properties:
+        id:
+          type: number
+          example: '1'
+        hour:
+          type: string
+          format: date-time
+        film:
+          $ref: '#/components/schemas/Film'
+        room:
+          $ref: '#/components/schemas/Room'
+    NewCategory:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Action"
+    Category:
+      type: object
+      properties:
+        id:
+          type: number
+          example: '1'
+      allOf:
+        - $ref: '#/components/schemas/NewCategory'
