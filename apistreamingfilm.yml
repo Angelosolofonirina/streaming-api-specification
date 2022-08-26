@@ -23,6 +23,26 @@ paths:
         400:
           description: Error
           content: {}
+    post:
+      tags:
+        - "Films"
+      summary: Creates some films
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/NewFilm'
+      responses:
+        200:
+          description: List of new films
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Film'
   /films{id}:
     get:
       tags:
@@ -60,7 +80,7 @@ paths:
           schema:
             type: int
             example: 220
-  /films{gender}:
+  /films/{gender}:
     get:
       tags:
         - "Films"
@@ -72,51 +92,43 @@ paths:
           in: query
           schema:
             type: string
-            example: romantic
-    put:
+            example: "romantic" 
+    patch:
       tags:
         - "Films"
-      summary: modifies entirely a film list
-      requestBody:
-        description: new film
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/Film'
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Film'
-        400:
-          description: Error
-          content: {}
-    post:
-      tags:
-        - "Films"
-      summary: Creates some films
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/NewFilm'
-      responses:
-        200:
-          description: List of new films
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Film'
+      summary: modify the prices of movies of the same genre
+      operationId: modifyFilms
+      description: apitoviana daholo ny vidin'ny film rehetra mitovy karazana
+      parameters:
+        - name: gender 
+          in: query 
+          schema:
+            type: string
+            example: "action"
+    #put:
+     # tags:
+      #  - "Films"
+      #summary: modifies entirely a film list
+      #requestBody:
+       # description: new film
+        #content:
+         # application/json:
+          #  schema:
+           #   type: array
+            #  items:
+             #   $ref: '#/components/schemas/Film'
+     # responses:
+       # 200:
+        #  description: Success
+         # content:
+          #  application/json:
+           #   schema:
+            #    type: array
+             #   items:
+              #    $ref: '#/components/schemas/Film'
+       # 400:
+        #  description: Error
+         # content: {}     
     delete:
       tags:
         - "Films"
